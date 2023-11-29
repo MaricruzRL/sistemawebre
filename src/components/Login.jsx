@@ -34,22 +34,21 @@ const Login = () => {
     <br />
     <br />
     <br />
-    <div className='titulo'>
     <h2>Bienvenido al inicio de sesión de residencia profesional</h2>
-</div>
+
     <div className="cajadatos">
     <p>Usuario</p>
-        <input type="text" placeholder="" />
+        <input type="text" placeholder="USUARIO" />
         
    <p>contraseñas</p>   
-        <input type="text" placeholder="" />
+        <input type="text" placeholder="CONTRASEÑA" />
         {isAuthenticated ? (<SignOutButton />) : ( <SignInButton />
 )}
       </div>
       {/*props.children*/}
     </div>
     <div className="blue-container">
-    <p>©2023 Instituto Tecnológico del Istmo</p>
+    <p>Inferior</p>
       {/*props.children*/}
     </div>
     {/* Fin del nuevo espacio */}

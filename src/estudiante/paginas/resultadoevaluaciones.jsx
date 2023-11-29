@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./estilos-impresion.css";
+
 import {
   fetchData,
   createData,
@@ -9,13 +9,15 @@ import {
   agregarevaluacion,
 } from "./formato";
 import axios from "axios";
-
+import "../../estilos_impresion/estudiante/estilos-impresion_estudiante.css"
 /**
  * Renders information about the user obtained from MS Graph
  * @param props
  */
 
+
 const Resultadoevaluaciones = (props) => {
+
   const nombrealm = props.graphData.graphData.graphData.displayName;
   const correo = props.graphData.graphData.graphData.mail;
   const numerosExtraidos = correo.match(/\d+/);
@@ -138,6 +140,11 @@ const Resultadoevaluaciones = (props) => {
 
   const imprimir3 = () => {
     // Ocultar otros elementos antes de imprimir
+    const style = document.createElement('style');
+    style.innerHTML = '@page { size: letter; }';
+  
+    // Agregar el estilo al head del documento
+    document.head.appendChild(style);
     window.print();
   };
 
@@ -202,15 +209,8 @@ const Resultadoevaluaciones = (props) => {
     { label: "Calificación total ", valor: 100, atributo: "dato10" },
   ];
   return (
-    <div className="contenido">
-      <div className="Anteproyectosubir__titulo">
-        <h1>¡Bienvenido Residente Tecnm!</h1>
-        <h1>
-          En este apartado tu podras visualisar las evaluaciones respectivas por
-          tus asesores
-        </h1>
-      </div>
-      <div className="informacion__tabla">
+      <div className="contenido">
+              <div className="informacion__tabla">
         <table border="1">
           <thead>
             <tr>
@@ -269,7 +269,7 @@ const Resultadoevaluaciones = (props) => {
                                 {evaluacionCorrespondienteE.attributes.dato15}
                               </td>
                               <button className="btn-asig" onClick={mostrarp2}>
-                                Imprimir Evaluacion Externa
+                                Imprimir Evaluacion Externa 
                               </button>
                               {/* Agrega un botón o lo que necesites para evaluE */}
                             </tr>
@@ -284,10 +284,9 @@ const Resultadoevaluaciones = (props) => {
           </tbody>
         </table>
       </div>
-
       {mostrarPopup && (
-        <div className="popup">
-          <div className="popup-contenido">
+        <div className="estvertical">
+          <div className="estverticalcontenido">
             <table className="mi-tabla2">
               <tbody>
                 <tr>
@@ -489,8 +488,8 @@ const Resultadoevaluaciones = (props) => {
       )}
 
       {mostrarPopupS && (
-        <div className="popup">
-          <div className="popup-contenido">
+        <div className="estvertical">
+        <div className="estverticalcontenido">
             <table className="mi-tabla2">
               <tbody>
                 <tr>
@@ -624,12 +623,36 @@ const Resultadoevaluaciones = (props) => {
                       <br />
                       <br />
                       <br />
-                      {data && data.data.filter((item) => item.attributes.correo === correo).map((item) => (
-                            <>
-                        {item.attributes.asesorE}
-                        </>
+                      {data &&
+                  data.data
+                    .filter((item) => item.attributes.correo === correo)
+                    .map((item) => {
+                      // Verificar si evalu es diferente de null y tiene la propiedad data
+                      if (evaluE2 && evaluE2.data) {
+                        // Verificar si existe un elemento en evalu con el mismo idevaluado
+                        const evaluacionCorrespondiente = evaluE2.data.find(
+                          (evaluItem) =>
+                            evaluItem.attributes.idevaluado ===
+                            item.id.toString()
+                        );
 
-                    ))}
+                        // Mostrar la fila solo si se encuentra una correspondencia en evalu
+                        if (evaluacionCorrespondiente) {
+                          // Ahora puedes acceder a item.attributes.nombre si se cumple la condición
+                          return (
+                            <>
+                           
+                           <p> {evaluacionCorrespondiente.attributes.asesori} </p>
+                            
+                            </>
+                          );
+                        }
+                      }
+
+                      return null;
+                      
+                      // O puedes mostrar un mensaje o lo que desees cuando no haya correspondencia
+                    })}
                     
                     </p>
                   </td>
@@ -666,7 +689,6 @@ const Resultadoevaluaciones = (props) => {
         </div>
       )}
 {/*   //////////////////////////////////////////////////////////////////////////////////////////////                          */ }
-
 <div className="informacion__tabla">
         <table border="1">
           <thead>
@@ -740,11 +762,11 @@ const Resultadoevaluaciones = (props) => {
                 })}
           </tbody>
         </table>
-      </div>   
+      </div>  
 
       {mostrarPopup3 && (
-        <div className="popup">
-          <div className="popup-contenido">
+        <div className="estvertical">
+        <div className="estverticalcontenido">
             <table className="mi-tabla2">
               <tbody>
                 <tr>
@@ -947,8 +969,8 @@ const Resultadoevaluaciones = (props) => {
 
 
 {mostrarPopup4 && (
-        <div className="popup">
-          <div className="popup-contenido">
+        <div className="estvertical">
+        <div className="estverticalcontenido">
             <table className="mi-tabla2">
               <tbody>
                 <tr>
@@ -1147,15 +1169,13 @@ const Resultadoevaluaciones = (props) => {
             </button>
           </div>
         </div>
-      )}
+      )}     
 
 
 
 
 
-
-
-    </div>
+      </div>
   );
 };
 export default Resultadoevaluaciones;

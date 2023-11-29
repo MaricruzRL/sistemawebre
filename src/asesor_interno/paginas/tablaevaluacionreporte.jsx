@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
-import "./estilos-impresion.css";
+
+
+import "../../estilos_impresion/interno/estilos-impresion_asesor_interno.css"
+
 import {
   fetchData,
   createData,
@@ -62,6 +65,13 @@ const Tablaevaluacionreporte = (props) => {
   ///
   const naevalua = "api/evaluacion1s";
   const naevaluaE = "api/evaluacion1-es";
+  ///ESTO ES LAS 2 SEGUNDAS EVALUACIONES
+
+  const nuevalua2 = "api/evaluacion2s";
+  const nuevaluaE2 = "api/evaluacion2-es";
+
+  const [evalu2, setEvalu2] = useState(null);
+  const [evaluE2, setEvalue2] = useState(null);
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -88,6 +98,10 @@ const Tablaevaluacionreporte = (props) => {
 
       const fetchedEvaluE = await fetchData(naevaluaE);
       setEvalue(fetchedEvaluE);
+      const fetchedEvalu2 = await fetchData(nuevalua2);
+      setEvalu2(fetchedEvalu2);
+      const fetchedEvaluE2 = await fetchData(nuevaluaE2);
+      setEvalue2(fetchedEvaluE2);
 
       console.log("Cargo todos los datos!", fetchedEvalu);
       //setEditingMode(true)
@@ -121,22 +135,38 @@ const Tablaevaluacionreporte = (props) => {
   const [mostrarPopupS, setMostrarPopupS] = useState(false);
 
   const imprimir3 = () => {
-    // Ocultar otros elementos antes de imprimir
-    window.print();
+     // Ocultar otros elementos antes de imprimir
+     const style = document.createElement('style');
+     style.innerHTML = '@page { size: letter; }';
+   
+     // Agregar el estilo al head del documento
+     document.head.appendChild(style);
+     window.print();
   };
 
   const [activeDataset, setActiveDataset] = useState("evalu");
+  const [activeDataset2, setActiveDataset2] = useState("evaluE");
+
   const [selectedItem, setSelectedItem] = useState(null);
+
+  const [selectedItem2, setSelectedItem2] = useState(null);
 
   const handleCerrarPopup = () => {
     // Lógica para cerrar el popup
     setMostrarPopup(false);
     setSelectedItem(null);
+    setSelectedItem2(null);
   };
 
   const handleCrearClick = (item2) => {
     setSelectedItem(item2);
     setActiveDataset("evalu");
+    setMostrarPopup(true);
+  };
+
+  const handleCrearClick2 = (item3) => {
+    setSelectedItem2(item3);
+    setActiveDataset2("evaluE");
     setMostrarPopup(true);
   };
 
@@ -189,6 +219,50 @@ const Tablaevaluacionreporte = (props) => {
     },
     { label: "Fuentes de información", valor: 3, atributo: "dato14" },
     { label: "Calificación total", valor: 100, atributo: "dato15" },
+  ];
+
+  const criteriosAEvaluar2 = [
+    {
+      label: "Asiste puntualmente en el horario establecido ",
+      valor: 5,
+      atributo: "dato1",
+    },
+    {
+      label:
+        "Trabaja en equipo y se comunica de forma efectiva (oral y escrita) ",
+      valor: 10,
+      atributo: "dato2",
+    },
+    { label: "Tiene iniciativa para colaborar ", valor: 5, atributo: "dato3" },
+    { label: "Propone mejoras al proyecto ", valor: 10, atributo: "dato4" },
+    {
+      label: "Cumple con los objetivos correspondientes al proyecto ",
+      valor: 15,
+      atributo: "dato5",
+    },
+    {
+      label:
+        "Es ordenado y cumple satisfactoriamente con las actividades encomendadas en los tiempos establecidos del cronograma ",
+      valor: 15,
+      atributo: "dato6",
+    },
+    {
+      label: "Demuestra liderazgo en su actuar ",
+      valor: 10,
+      atributo: "dato7",
+    },
+    {
+      label: "Demuestra conocimiento en el área de su especialidad ",
+      valor: 20,
+      atributo: "dato8",
+    },
+    {
+      label:
+        "Demuestra un comportamiento ético (es disciplinado, acata órdenes, respeta a sus compañeros de trabajo, entre otros)  ",
+      valor: 10,
+      atributo: "dato9",
+    },
+    { label: "Calificación total ", valor: 100, atributo: "dato10" },
   ];
 
   return (
@@ -261,6 +335,69 @@ const Tablaevaluacionreporte = (props) => {
         </table>
       </div>
 
+      <div className="informacion__tabla">
+        <table border="1">
+          <thead>
+            <tr>
+              <th>EVALUACION Y SEGUIMIENTO DE RESIDENCIA PROFESIONAL</th>
+              <th>Calificaion</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data &&
+              data.data
+                .filter((item) => item.attributes.correoasesor === correo)
+                .map((item) => {
+                  // Verificar si evalu es diferente de null y tiene la propiedad data
+                  if (evalu2 && evalu2.data && evaluE2 && evaluE2.data) {
+                    // Verificar si existe un elemento en evalu con el mismo idevaluado
+                    const evaluacionCorrespondiente = evalu2.data.find(
+                      (evaluItem) =>
+                        evaluItem.attributes.idevaluado === item.id.toString()
+                    );
+
+                    // Verificar lo mismo para evaluE
+                    const evaluacionCorrespondienteE = evaluE2.data.find(
+                      (evaluEItem) =>
+                        evaluEItem.attributes.idevaluado === item.id.toString()
+                    );
+
+                    // Mostrar la fila solo si se encuentra una correspondencia en evalu o evaluE
+                    if (
+                      evaluacionCorrespondiente ||
+                      evaluacionCorrespondienteE
+                    ) {
+                      return (
+                        <React.Fragment key={item.id}>
+                          {/* Fila para evalu */}
+                          {evaluacionCorrespondiente && (
+                            <tr>
+                              <td>{item.attributes.nombre}</td>
+                              <td>
+                                {evaluacionCorrespondiente.attributes.dato10}
+                              </td>
+                              <button
+                                className="btn-asig"
+                                onClick={() => handleCrearClick2(item)}
+                              >
+                                Imprimir Evaluacion Interna
+                              </button>
+                            </tr>
+                          )}
+                        </React.Fragment>
+                      );
+                    }
+                  }
+
+                  return null; // O puedes mostrar un mensaje o lo que desees cuando no haya correspondencia
+                })}
+          </tbody>
+        </table>
+      </div>
+
+      {/* AQUI SE MUESTRAN LAS EVALUACIONES  */}
+
       {selectedItem && (
         <div>
           <h2>Detalles del Elemento Seleccionado</h2>
@@ -272,8 +409,8 @@ const Tablaevaluacionreporte = (props) => {
       )}
 
       {selectedItem && (
-        <div className="popup">
-          <div className="popup-contenido">
+        <div className="aivertical">
+          <div className="aiverticalcontenido">
             <table className="mi-tabla2">
               <tbody>
                 <tr>
@@ -309,95 +446,82 @@ const Tablaevaluacionreporte = (props) => {
 
             <br />
 
-            <p style={{ textAlign: "center" }}>"Hoja Oficial membretada"</p>
-            {data &&
-              data.data
-                .filter((item) => item.attributes.correo === correo)
-                .map((item) => (
-                  <>
-                    <p style={{ textAlign: "left" }}>
-                      Nombre del Residente: {selectedItem.attributes.nombre}{" "}
-                    </p>
-                    <p style={{ textAlign: "left" }}>
-                      Numero de control: {selectedItem.attributes.ncontrol}
-                    </p>
-                    <p style={{ textAlign: "left" }}>
-                      Nombre del Proyecto:{" "}
-                      {selectedItem.attributes.nombre_anteproyecto}
-                    </p>
-                    <p style={{ textAlign: "left" }}>
-                      Programa Educativo: {selectedItem.attributes.carrera}
-                    </p>
-                    <p style={{ textAlign: "left" }}>
-                      Periodo de realizacion de la residencia profesional:
-                      {selectedItem.attributes.periodo}{" "}
-                    </p>
-                    <p style={{ textAlign: "left" }}>
-                      Calificación Parcial (Promedio de ambas evaluaciones) :{" "}
-                      {selectedItem.attributes.califasesorI}
-                    </p>
-                  </>
-                ))}
+            <p style={{ textAlign: "center" }}>"Hoja Oficial membretada 1"</p>
+
+            <>
+              <p style={{ textAlign: "left" }}>
+                Nombre del Residente: {selectedItem.attributes.nombre}{" "}
+              </p>
+              <p style={{ textAlign: "left" }}>
+                Numero de control: {selectedItem.attributes.ncontrol}
+              </p>
+              <p style={{ textAlign: "left" }}>
+                Nombre del Proyecto:{" "}
+                {selectedItem.attributes.nombre_anteproyecto}
+              </p>
+              <p style={{ textAlign: "left" }}>
+                Programa Educativo: {selectedItem.attributes.carrera}
+              </p>
+              <p style={{ textAlign: "left" }}>
+                Periodo de realizacion de la residencia profesional:
+                {selectedItem.attributes.periodo}{" "}
+              </p>
+              <p style={{ textAlign: "left" }}>
+                Calificación Parcial (Promedio de ambas evaluaciones) :{" "}
+                {selectedItem.attributes.califasesorI}
+              </p>
+            </>
 
             <table className="mi-tabla2">
               <tbody>
-                {data &&
-                  data.data
-                    .filter((item) => item.attributes.correo === correo)
-                    .map((item) => {
-                      // Verificar si evalu es diferente de null y tiene la propiedad data
-                      if (evalu && evalu.data) {
-                        // Verificar si existe un elemento en evalu con el mismo idevaluado
-                        const evaluacionCorrespondiente = evalu.data.find(
-                          (evaluItem) =>
-                            evaluItem.attributes.idevaluado ===
-                            selectedItem.id.toString()
-                        );
+                {evalu &&
+                  evalu.data &&
+                  evalu.data
+                    .filter(
+                      (evaluItem) =>
+                        evaluItem.attributes.idevaluado ===
+                        selectedItem.id.toString()
+                    )
+                    .map((evaluacionCorrespondiente) => {
+                      // Mostrar la fila solo si se encuentra una correspondencia en evalu
+                      if (evaluacionCorrespondiente) {
+                        return (
+                          <>
+                            <tr>
+                              En qué medida el residente cumple con lo siguiente
+                            </tr>
 
-                        // Mostrar la fila solo si se encuentra una correspondencia en evalu
-                        if (evaluacionCorrespondiente) {
-                          // Ahora puedes acceder a item.attributes.nombre si se cumple la condición
-                          return (
-                            <>
-                              <tr>
-                                En qué medida el residente cumple con lo
-                                siguiente
+                            <th>Criterios a evaluar </th>
+                            <th>Valor</th>
+                            <th>Evaluacion</th>
+
+                            {criteriosAEvaluar.map((criterio, index) => (
+                              <tr key={`dato${index + 1}`}>
+                                <td>{criterio.label}</td>
+                                <td>{criterio.valor}</td>
+                                <td>
+                                  {
+                                    evaluacionCorrespondiente.attributes[
+                                      criterio.atributo
+                                    ]
+                                  }
+                                </td>
                               </tr>
+                            ))}
 
-                              <th>Criterios a evaluar </th>
-                              <th>Valor</th>
-                              <th>Evaluacion</th>
-
-                              {criteriosAEvaluar.map((criterio, index) => (
-                                <tr key={item.id + `-dato${index + 1}`}>
-                                  <td>{criterio.label}</td>
-                                  <td>{criterio.valor}</td>
-                                  <td>
-                                    {
-                                      evaluacionCorrespondiente.attributes[
-                                        criterio.atributo
-                                      ]
-                                    }
-                                  </td>
-                                </tr>
-                              ))}
-
-                              {/* Agrega más filas si es necesario */}
-                              <p style={{ textAlign: "left" }}>Observaciones</p>
-                              <p style={{ textAlign: "left" }}>
-                                {
-                                  evaluacionCorrespondiente.attributes
-                                    .observaciones
-                                }
-                              </p>
-                            </>
-                          );
-                        }
+                            {/* Agrega más filas si es necesario */}
+                            <p style={{ textAlign: "left" }}>Observaciones</p>
+                            <p style={{ textAlign: "left" }}>
+                              {
+                                evaluacionCorrespondiente.attributes
+                                  .observaciones
+                              }
+                            </p>
+                          </>
+                        );
                       }
 
                       return null;
-
-                      // O puedes mostrar un mensaje o lo que desees cuando no haya correspondencia
                     })}
               </tbody>
             </table>
@@ -412,39 +536,31 @@ const Tablaevaluacionreporte = (props) => {
                       <br />
                       <br />
                       <br />
-                      {data &&
-                        data.data
-                          .filter((item) => item.attributes.correo === correo)
-                          .map((item) => {
-                            // Verificar si evalu es diferente de null y tiene la propiedad data
-                            if (evalu && evalu.data) {
-                              // Verificar si existe un elemento en evalu con el mismo idevaluado
-                              const evaluacionCorrespondiente = evalu.data.find(
-                                (evaluItem) =>
-                                  evaluItem.attributes.idevaluado ===
-                                  item.id.toString()
+                      {evalu &&
+                        evalu.data &&
+                        evalu.data
+                          .filter(
+                            (evaluItem) =>
+                              evaluItem.attributes.idevaluado ===
+                              selectedItem.id.toString()
+                          )
+                          .map((evaluacionCorrespondiente) => {
+                            // Mostrar la fila solo si se encuentra una correspondencia en evalu
+                            if (evaluacionCorrespondiente) {
+                              return (
+                                <>
+                                  <p>
+                                    {" "}
+                                    {
+                                      evaluacionCorrespondiente.attributes
+                                        .asesori
+                                    }{" "}
+                                  </p>
+                                </>
                               );
-
-                              // Mostrar la fila solo si se encuentra una correspondencia en evalu
-                              if (evaluacionCorrespondiente) {
-                                // Ahora puedes acceder a item.attributes.nombre si se cumple la condición
-                                return (
-                                  <>
-                                    <p>
-                                      {" "}
-                                      {
-                                        evaluacionCorrespondiente.attributes
-                                          .asesori
-                                      }{" "}
-                                    </p>
-                                  </>
-                                );
-                              }
                             }
 
                             return null;
-
-                            // O puedes mostrar un mensaje o lo que desees cuando no haya correspondencia
                           })}
                     </p>
                   </td>
@@ -481,9 +597,9 @@ const Tablaevaluacionreporte = (props) => {
         </div>
       )}
 
-      {mostrarPopupS && (
-        <div className="popup">
-          <div className="popup-contenido">
+      {selectedItem2 && (
+        <div className="aivertical">
+        <div className="aiverticalcontenido">
             <table className="mi-tabla2">
               <tbody>
                 <tr>
@@ -496,7 +612,7 @@ const Tablaevaluacionreporte = (props) => {
                     />
                   </td>
                   <td style={{ textAlign: "center", fontWeight: "bold" }}>
-                    Instituto Tecnológico Del Istmo 2
+                    Instituto Tecnológico Del Istmo
                     <br />
                     "Por una Tecnología Propia como principio de libertad"
                     <br />
@@ -519,92 +635,82 @@ const Tablaevaluacionreporte = (props) => {
 
             <br />
 
-            <p style={{ textAlign: "center" }}>"Hoja Oficial membretada"</p>
-            {data &&
-              data.data
-                .filter((item) => item.attributes.correo === correo)
-                .map((item) => (
-                  <>
-                    <p style={{ textAlign: "left" }}>
-                      Nombre del Residente: {item.attributes.nombre}{" "}
-                    </p>
-                    <p style={{ textAlign: "left" }}>
-                      Numero de control: {item.attributes.ncontrol}
-                    </p>
-                    <p style={{ textAlign: "left" }}>
-                      Nombre del Proyecto: {item.attributes.nombre_anteproyecto}
-                    </p>
-                    <p style={{ textAlign: "left" }}>
-                      Programa Educativo: {item.attributes.carrera}
-                    </p>
-                    <p style={{ textAlign: "left" }}>
-                      Periodo de realizacion de la residencia profesional:
-                      {item.attributes.periodo}{" "}
-                    </p>
-                    <p style={{ textAlign: "left" }}>
-                      Calificación Parcial (Promedio de ambas evaluaciones) :{" "}
-                      {item.attributes.califasesorI}
-                    </p>
-                  </>
-                ))}
+            <p style={{ textAlign: "center" }}>"Hoja Oficial membretada 2"</p>
+
+            <>
+              <p style={{ textAlign: "left" }}>
+                Nombre del Residente: {selectedItem2.attributes.nombre}{" "}
+              </p>
+              <p style={{ textAlign: "left" }}>
+                Numero de control: {selectedItem2.attributes.ncontrol}
+              </p>
+              <p style={{ textAlign: "left" }}>
+                Nombre del Proyecto:{" "}
+                {selectedItem2.attributes.nombre_anteproyecto}
+              </p>
+              <p style={{ textAlign: "left" }}>
+                Programa Educativo: {selectedItem2.attributes.carrera}
+              </p>
+              <p style={{ textAlign: "left" }}>
+                Periodo de realizacion de la residencia profesional:
+                {selectedItem2.attributes.periodo}{" "}
+              </p>
+              <p style={{ textAlign: "left" }}>
+                Calificación Parcial (Promedio de ambas evaluaciones) :{" "}
+                {selectedItem2.attributes.califasesorI}
+              </p>
+            </>
 
             <table className="mi-tabla2">
               <tbody>
-                {data &&
-                  data.data
-                    .filter((item) => item.attributes.correo === correo)
-                    .map((item) => {
-                      // Verificar si evalu es diferente de null y tiene la propiedad data
-                      if (evaluE && evaluE.data) {
-                        // Verificar si existe un elemento en evalu con el mismo idevaluado
-                        const evaluacionCorrespondienteE = evaluE.data.find(
-                          (evaluItem) =>
-                            evaluItem.attributes.idevaluado ===
-                            item.id.toString()
-                        );
+              {evalu2 &&
+                  evalu2.data &&
+                  evalu2.data
+                    .filter(
+                      (evaluItem) =>
+                        evaluItem.attributes.idevaluado ===
+                        selectedItem2.id.toString()
+                    )
+                    .map((evaluacionCorrespondiente) => {
+                      // Mostrar la fila solo si se encuentra una correspondencia en evalu
+                      if (evaluacionCorrespondiente) {
+                        return (
+                          <>
+                            <tr>
+                              En qué medida el residente cumple con lo siguiente
+                            </tr>
 
-                        // Mostrar la fila solo si se encuentra una correspondencia en evalu
-                        if (evaluacionCorrespondienteE) {
-                          // Ahora puedes acceder a item.attributes.nombre si se cumple la condición
-                          return (
-                            <>
-                              <tr>
-                                En qué medida el residente cumple con lo
-                                siguiente
+                            <th>Criterios a evaluar </th>
+                            <th>Valor</th>
+                            <th>Evaluacion</th>
+
+                            {criteriosAEvaluar2.map((criterio, index) => (
+                              <tr key={`dato${index + 1}`}>
+                                <td>{criterio.label}</td>
+                                <td>{criterio.valor}</td>
+                                <td>
+                                  {
+                                    evaluacionCorrespondiente.attributes[
+                                      criterio.atributo
+                                    ]
+                                  }
+                                </td>
                               </tr>
+                            ))}
 
-                              <th>Criterios a evaluar </th>
-                              <th>Valor</th>
-                              <th>Evaluacion</th>
-                              {criteriosAEvaluar.map((criterio, index) => (
-                                <tr key={item.id + `-dato${index + 1}`}>
-                                  <td>{criterio.label}</td>
-                                  <td>{criterio.valor}</td>
-                                  <td>
-                                    {
-                                      evaluacionCorrespondienteE.attributes[
-                                        criterio.atributo
-                                      ]
-                                    }
-                                  </td>
-                                </tr>
-                              ))}
-
-                              {/* Agrega más filas si es necesario */}
-                              {/* Agrega más filas si es necesario */}
-                              <p style={{ textAlign: "left" }}>Observaciones</p>
-                              <p style={{ textAlign: "left" }}>
-                                {
-                                  evaluacionCorrespondienteE.attributes
-                                    .observaciones
-                                }
-                              </p>
-                            </>
-                          );
-                        }
+                            {/* Agrega más filas si es necesario */}
+                            <p style={{ textAlign: "left" }}>Observaciones</p>
+                            <p style={{ textAlign: "left" }}>
+                              {
+                                evaluacionCorrespondiente.attributes
+                                  .observaciones
+                              }
+                            </p>
+                          </>
+                        );
                       }
 
-                      return null; // O puedes mostrar un mensaje o lo que desees cuando no haya correspondencia
+                      return null;
                     })}
               </tbody>
             </table>
@@ -619,10 +725,32 @@ const Tablaevaluacionreporte = (props) => {
                       <br />
                       <br />
                       <br />
-                      {data &&
-                        data.data
-                          .filter((item) => item.attributes.correo === correo)
-                          .map((item) => <>{item.attributes.asesorE}</>)}
+                      {evalu2 &&
+                        evalu2.data &&
+                        evalu2.data
+                          .filter(
+                            (evaluItem) =>
+                              evaluItem.attributes.idevaluado ===
+                              selectedItem2.id.toString()
+                          )
+                          .map((evaluacionCorrespondiente) => {
+                            // Mostrar la fila solo si se encuentra una correspondencia en evalu
+                            if (evaluacionCorrespondiente) {
+                              return (
+                                <>
+                                  <p>
+                                    {" "}
+                                    {
+                                      evaluacionCorrespondiente.attributes
+                                        .asesori
+                                    }{" "}
+                                  </p>
+                                </>
+                              );
+                            }
+
+                            return null;
+                          })}
                     </p>
                   </td>
                   <td>
@@ -651,7 +779,7 @@ const Tablaevaluacionreporte = (props) => {
             <button className="btn-asig" onClick={imprimir3}>
               Imprimir
             </button>
-            <button className="btn-asig" onClick={cerrarp2}>
+            <button className="btn-asig" onClick={handleCerrarPopup}>
               Cerrar
             </button>
           </div>

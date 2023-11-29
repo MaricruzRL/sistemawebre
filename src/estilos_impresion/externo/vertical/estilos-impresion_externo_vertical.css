@@ -15,20 +15,20 @@
     font-size: 11px;
     
   }
-  .popup, .popup * {
+  .externovertical, .externovertical * {
     visibility: visible;
     overflow-y: visible;
   }
 
 
-  .popup-contenido {
+  .externoverticalcontenido {
     width: 18cm; /* Ancho para tamaño carta en centímetros */
     height: 25.7cm; /* Alto para tamaño carta en centímetros */
     overflow-y: visible;
     margin: 0;
     padding: 0;
   }
-  .popup-contenido header {
+  .externoverticalcontenido header {
     margin: 0;
     padding: 0;
   }
@@ -43,7 +43,7 @@
 
 
 /* En TuComponente.css o tu archivo de estilos */
-.popup {
+.externovertical {
   position: fixed;
   top: 0;
   left: 0;
@@ -57,7 +57,7 @@
   
 }
 
-.popup-contenido {
+.externoverticalcontenido {
   background: #fff; /* Fondo blanco */
   padding: 20px;
   border-radius: 8px;

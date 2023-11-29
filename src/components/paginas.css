@@ -4,20 +4,9 @@
     background-color: #007bff;
     color: #fff;
   }
-  h2{
-    text-align: center;
-    color: #000000;
-  }
-  p{
-    font-weight:500;
-  }
   
   .header {
     text-align: center;
-  }
-  .titulo{
-    background-color:white;
-    margin-top: 0;
   }
   
   .cajaprincipal {
@@ -54,15 +43,12 @@
     align-items: center;
     align-items: center;
     margin-right: 20px;
-    /*margin-left: auto; /* Pegado a la derecha */
+    margin-left: auto; /* Pegado a la derecha */
     padding: 20px; /* Ajusta el espaciado interno según sea necesario */
     max-width: 400px; /* Ancho máximo del recuadro */
     width: 100%; /* Hace que el recuadro sea adaptable */
     height: 50vh;
-    top: 50%;
-  left: 50%;
     box-sizing: border-box; /* Incluye el padding y el borde en el ancho total */
-    border: groove #cdcdcd;
   }
   
   
@@ -93,7 +79,6 @@
     background-color: #ff9900; /* Ejemplo de color de fondo */
     color: #ffffff; /* Ejemplo de color de texto */
     /* Agrega más estilos según sea necesario */
-    font-weight:400;
 }
 .logo-image {
     width: 20px; /* Ajusta el ancho de la imagen según sea necesario */
@@ -121,16 +106,9 @@ height: auto;
 .imagen-contenedor {
     width: 50%; /* Ajusta el ancho según sea necesario */
     height: 10vh; /* Mantiene la proporción de aspecto */
-  
+    border: 2px solid #333; /* Ejemplo de borde */
+    border-radius: 8px; /* Ejemplo de bordes redondeados */
     /* Agrega más estilos según sea necesario */
-    align-content: center;
   }
-input{
-border-radius: 0.5vw;
-border: groove #cdcdcd;
-width: 75%;
 
-}
-.titulo{
-  background-color:#ffffff;
-}
+  

@@ -9,10 +9,7 @@ import PaginaAsesorInterno from "../PaginaAsesorinterno";
  * @param props 
  */
 export const ProfileData = (props) => {
-
-
   console.log(props.graphData);
-  
 
   if (props.graphData.jobTitle === "Estudiante") {
     // Realiza la navegación a la ruta "/home" si el jobTitle es "Estudiante"
@@ -23,7 +20,7 @@ export const ProfileData = (props) => {
       {/*<PaginaEstu graphData={props}/>*/}
       {/*<PaginaCor graphData={props}/>*/}
       {/*<PaginaAsesorInterno graphData={props} />*/}
-      <PaginaEstu graphData={props}/>
+      <PaginaJefeCarrera graphData={props} />
 
       </div>
     </Router>

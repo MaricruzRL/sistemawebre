@@ -1,34 +1,24 @@
 /* Estilos para la versión de impresión */
 @media print {
-  @page {
-    margin: 0;
-    border: 0;
-    padding: 0;
-  }
+
   table {
     page-break-inside: avoid;
   }
-  body * {
-    margin: 5;
-    visibility: hidden;
-    overflow-y: visible;
-    font-size: 7px;
-    
-  }
-  .popup, .popup * {
+
+  .aivertical, .aivertical * {
     visibility: visible;
     overflow-y: visible;
   }
 
 
-  .popup-contenido {
+  .aiverticalcontenido {
     width: 18cm; /* Ancho para tamaño carta en centímetros */
     height: 25.7cm; /* Alto para tamaño carta en centímetros */
     overflow-y: visible;
     margin: 0;
     padding: 0;
   }
-  .popup-contenido header {
+  .aiverticalcontenido header {
     margin: 0;
     padding: 0;
   }
@@ -43,7 +33,7 @@
 
 
 /* En TuComponente.css o tu archivo de estilos */
-.popup {
+.aivertical {
   position: fixed;
   top: 0;
   left: 0;
@@ -57,28 +47,29 @@
   
 }
 
-.popup-contenido {
+.aiverticalcontenido {
   background: #fff; /* Fondo blanco */
   padding: 20px;
   border-radius: 8px;
  /* width: 150vh;  Ajusta según sea necesario */
  width: 80%;
-  height: 90vh;/*ALTO*/
+  height: 98vh;/*ALTO*/
   overflow-y: auto;
   
 }
 
-.mi-tabla {
+
+.mi-tabla2 {
   border-collapse: collapse;
   width: 100%;
 }
 
-.mi-tabla th, .mi-tabla td {
+.mi-tabla2 th, .mi-tabla2 td {
   border: 1px solid #000000;
   text-align: left;
-  padding: 5px;
+  padding:1px;
 }
 
-.mi-tabla th {
+.mi-tabla2 th {
   background-color: #f2f2f2;
 }
